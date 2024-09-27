@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Lab - Metacentric Height</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Virtual Lab - Metacentric Height Experiment</h1>
+        
+        <div class="button-container">
+            <button onclick="showSection('aim')">Aim</button>
+            <button onclick="showSection('theory')">Theory</button>
+            <button onclick="showSection('equipment')">Equipment Required</button>
+            <button onclick="showSection('setup')">Experimental Setup</button>
+            <button onclick="showSection('procedure')">Procedure</button>
+            <button onclick="showSection('observations')">Observations</button>
+            <button onclick="showSection('precautions')">Precautions</button>
+            <button onclick="showSection('results')">Results</button>
+        </div>
+        
+        <section id="aim">
+            <h2>Aim</h2>
+            <img src="aim.jpg" alt="Aim" class="right-image">
+            <p>To determine the metacentric height of a ship model.</p>
+        </section>
+        
+        <section id="theory" style="display:none;">
+            <h2>Theory</h2>
+            <img src="theory.jpg" alt="Theory" class="right-image">
+            <p>The metacentric height (GM) is a measure of the initial static stability of a floating body. It is the distance between the center of gravity (G) and the metacenter (M).</p>
+            <p>When a floating body is tilted through a small angle, its center of buoyancy will be shifted to a new position. The point of intersection of the vertical line drawn through the new center of buoyancy and the original vertical line through the center of buoyancy is called the metacenter. The distance between the center of gravity and the metacenter is known as the metacentric height.</p>
+        </section>
+        
+        <section id="equipment" style="display:none;">
+            <h2>Equipment Required</h2>
+            <img src="equipment.jpg" alt="Equipment Required" class="right-image">
+            <ul>
+                <li>The ship model</li>
+                <li>Tank</li>
+                <li>Perpex sheet</li>
+                <li>Scale</li>
+                <li>Set of weights</li>
+            </ul>
+        </section>
+        
+        <section id="setup" style="display:none;">
+            <h2>Experimental Setup</h2>
+            <img src="setup.jpg" alt="Experimental Setup" class="right-image">
+            <p>The set-up consists of:</p>
+            <ul>
+                <li>Brass sheet vessel size 250x250x170mm</li>
+                <li>MS tank: 70x40x30cm</li>
+                <li>MS angle thickness: 2mm</li>
+                <li>Drain valve: 15mm</li>
+                <li>Removable MS strips: 6 No.s</li>
+            </ul>
+        </section>
+        
+        <section id="procedure" style="display:none;">
+            <h2>Procedure</h2>
+            <img src="procedure.jpg" alt="Procedure" class="right-image">
+            <ol>
+                <li>Place the ship model in water and ensure it is floating freely.</li>
+                <li>Tilt the ship model slightly and measure the angle of tilt.</li>
+                <li>Measure the distance between the center of gravity and the center of buoyancy.</li>
+            </ol>
+        </section>
+        
+        <section id="observations" style="display:none;">
+            <h2>Observations</h2>
+            <img src="observations.jpg" alt="Observations" class="right-image">
+            <p>Enter the data to simulate the ship model:</p>
+            <label for="tiltAngle">Tilt Angle (degrees):</label>
+            <input type="number" id="tiltAngle" name="tiltAngle"><br><br>
+            <label for="weightFloatingBody">Weight of Floating Body (kg):</label>
+            <input type="number" id="weightFloatingBody" name="weightFloatingBody"><br><br>
+            <label for="displacementWeight">Displacement of Weight (kg):</label>
+            <input type="number" id="displacementWeight" name="displacementWeight"><br><br>
+            <label for="weightShip">Weight of Ship (kg):</label>
+            <input type="number" id="weightShip" name="weightShip"><br><br>
+            <button onclick="simulateShip()">Simulate</button>
+            <button onclick="toggleView()">Toggle View</button>
+            <div id="simulationResult"></div>
+            <div id="initialShip" class="ship">
+                <img src="ship.png" alt="Ship">
+            </div>
+            <div id="finalShip" class="ship" style="display:none;">
+                <img src="ship.png" alt="Ship">
+            </div>
+        </section>
+        
+        <section id="precautions" style="display:none;">
+            <h2>Precautions</h2>
+            <img src="precautions.jpg" alt="Precautions" class="right-image">
+            <ul>
+                <li>Ensure the ship model is floating freely before taking measurements.</li>
+                <li>Handle the equipment carefully to avoid any damage.</li>
+            </ul>
+        </section>
+        
+        <section id="results" style="display:none;">
+            <h2>Results</h2>
+            <img src="results.jpg" alt="Results" class="right-image">
+            <p id="metacentricHeightResult"></p>
+        </section>
+    </div>
+    <script>
+        window.onload = function() {
+            alert("Welcome to the Virtual Lab of Fluid Mechanics, NIT Jalandhar!");
+            showSection('aim');
+        };
+
+        function showSection(sectionId) {
+            var sections = document.querySelectorAll('section');
+            sections.forEach(function(section) {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        function simulateShip() {
+            var tiltAngle = document.getElementById('tiltAngle').value;
+            var weightFloatingBody = document.getElementById('weightFloatingBody').value;
+            var displacementWeight = document.getElementById('displacementWeight').value;
+            var weightShip = document.getElementById('weightShip').value;
+            var initialShip = document.getElementById('initialShip');
+            var finalShip = document.getElementById('finalShip');
+
+            // Update the initial ship's tilt
+            initialShip.style.transform = 'rotate(0deg)';
+
+            // Update the final ship's tilt based on the input data
+            finalShip.style.transform = 'rotate(' + tiltAngle + 'deg)';
+
+            // Display the simulation result
+            var result = 'The ship is tilted at ' + tiltAngle + ' degrees with a weight of ' + weightFloatingBody + ' kg.';
+            document.getElementById('simulationResult').innerText = result;
+
+            // Calculate the metacentric height
+            var metacentricHeight = (weightFloatingBody * displacementWeight) / (weightShip * Math.tan(tiltAngle * Math.PI / 180));
+            document.getElementById('metacentricHeightResult').innerText = 'The calculated metacentric height (GM) is: ' + metacentricHeight.toFixed(2) + ' units.';
+        }
+
+        function toggleView() {
+            var initialShip = document.getElementById('initialShip');
+            var finalShip = document.getElementById('finalShip');
+
+            if (initialShip.style.display === 'none') {
+                initialShip.style.display = 'block';
+                finalShip.style.display = 'none';
+            } else {
+                initialShip.style.display = 'none';
+                finalShip.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
